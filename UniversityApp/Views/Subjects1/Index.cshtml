@@ -1,0 +1,81 @@
+﻿
+@model UniversityApp.Krajno.SearchView
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<form asp-controller="Subjects1" asp-action="Index">
+    <p>
+        Title: <input type="text" name="Name" />
+         Semester: <input type="text" name="Sid" />
+        <input type="submit" value="Filter" />
+    </p>
+ 
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Subjects[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subjects[0].Credits)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subjects[0].Semester)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subjects[0].Programme)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subjects[0].EducationLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subjects[0].FirstTeacherId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subjects[0].SecondTeacherId)
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Subjects) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Credits)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Semester)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Programme)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EducationLevel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SecondTeacherId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstTeacherId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
