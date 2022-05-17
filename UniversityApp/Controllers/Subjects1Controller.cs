@@ -3,6 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -25,9 +28,10 @@ namespace UniversityApp.Controllers
         // GET: Subjects1
         public async Task<IActionResult> Index(string Name,string Sid)
         {
-           
-                // Use LINQ to get list of genres.
-                IQueryable<string> genreQuery = from m in _context.Subjects
+          
+
+            // Use LINQ to get list of genres.
+            IQueryable<string> genreQuery = from m in _context.Subjects
                                                 select m.Semester;
                 var movies = from m in _context.Subjects
                              select m;
@@ -55,6 +59,7 @@ namespace UniversityApp.Controllers
         }
 
         // GET: Subjects1/Details/5
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -62,7 +67,7 @@ namespace UniversityApp.Controllers
                 return NotFound();
             }
 
-
+            
             
               var subjects = await _context.Subjects
                 .FirstOrDefaultAsync(m => m.Id == id);
@@ -139,6 +144,9 @@ namespace UniversityApp.Controllers
             {
                 return NotFound();
             }
+             var students = from m in _context.Students
+                                          select m;
+            subjects.Studenti=await students.ToListAsync();
             return View(subjects);
         }
 
@@ -149,6 +157,7 @@ namespace UniversityApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit( Subjects subjects)
         {
+
             _context.Update(subjects);
             _context.SaveChanges();
             return RedirectToAction("Index");
@@ -189,4 +198,5 @@ namespace UniversityApp.Controllers
             return _context.Subjects.Any(e => e.Id == id);
         }
     }
+    
 }

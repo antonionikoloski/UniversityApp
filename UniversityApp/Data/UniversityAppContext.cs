@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using UniversityApp.Areas.Identity.Data;
 using UnversityApp.Models;
 
 namespace UniversityApp.Data
 {
-    public class UniversityAppContext : DbContext
+    public class UniversityAppContext : IdentityDbContext<UniversityAppUser>
     {
         public UniversityAppContext (DbContextOptions<UniversityAppContext> options)
             : base(options)
@@ -27,6 +29,7 @@ namespace UniversityApp.Data
         
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
             builder.Entity<EnrollMent>()
                 .HasOne<Students>(p => p.Students)
                 .WithMany(p => p.EnrollMent)
@@ -44,15 +47,16 @@ namespace UniversityApp.Data
             .WithMany(p => p.Subjects)
      
             .HasForeignKey(p => p.FirstTeacherId);
+
+
+           
+
            
 
 
 
-            builder.Entity<Subjects>()
-           .HasOne<Teachers>(p => p.Teachers2)
-          .WithMany(p => p.Subjects2)
        
-          .HasForeignKey(p => p.SecondTeacherId);
+       
 
         }
 

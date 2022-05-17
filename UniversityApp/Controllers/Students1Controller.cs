@@ -3,10 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using UniversityApp.Areas.Identity.Data;
 using UniversityApp.Data;
+using UniversityApp.Krajno;
 using UnversityApp.Models;
 
 namespace UniversityApp.Controllers
@@ -21,9 +26,13 @@ namespace UniversityApp.Controllers
         }
 
         // GET: Students1
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
+            
+
             return View(await _context.Students.ToListAsync());
+           
         }
 
         // GET: Students1/Details/5
@@ -55,11 +64,12 @@ namespace UniversityApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,StudentID,FirstName,LastName,EnrollmentDate,AcquiredCredits,CurrentSemestar,EducationLevel")] Students students)
+        public async Task<IActionResult> Create([Bind("Id,StudentID,FirstName,LastName,EnrollmentDate,AcquiredCredits,CurrentSemestar,EducationLevel")] Students students,[Bind("Email,PasswordHash")] UniversityAppUser userce)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(students);
+                _context.Add(userce);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -145,10 +155,86 @@ namespace UniversityApp.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> LoginStudent(int ID)
+        {
 
+            return View();
+        }
+        public async Task<IActionResult> LoginStudent1(int id)
+        {
+            var students =  await _context.Enrollment
+               .FirstOrDefaultAsync(m => m.Pom1Id == id);
+
+            var pom_students = await _context.Students
+                .FirstOrDefaultAsync(m => m.Id == students.Pom1Id);
+
+
+            var students1 = from m in _context.Enrollment
+                           select m;
+
+            students1 = students1.Where(x => x.Pom1Id == id);
+           var subjekati= from m in _context.Subjects
+                          select m;
+            List<int> nova = new List<int>();
+            foreach (var pom in subjekati)
+            {
+                foreach (var j in students1)
+                {
+                    if (pom.Id == j.Pom2Id)
+                    {
+                        nova.Add(j.Pom2Id);
+                    }
+                }
+            }
+            subjekati = subjekati.Where(t => nova.Contains(t.Id));
+            pom_students.Predmeti = await subjekati.ToListAsync();
+
+            students1 = students1.Where(t => nova.Contains(t.Pom2Id));
+            pom_students.EnrollMent = await students1.ToListAsync();
+
+            return View(pom_students);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LoginStudentDetails(int id,IFormFile file)
+        {
+            string uniqueFileName = UploadedFile(file);
+            
+            var students3 = await _context.Enrollment
+              .FirstOrDefaultAsync(m => m.Pom1Id == id);
+            students3.SeminalUrl = uniqueFileName;
+            _context.Update(students3);
+            _context.SaveChanges();
+           
+
+         
+            return View();
+        }
         private bool StudentsExists(int id)
         {
             return _context.Students.Any(e => e.Id == id);
         }
+        private string UploadedFile(IFormFile viewmodel)
+        {
+            string uniqueFileName = null;
+
+            if (viewmodel != null)
+            {
+                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/haah" );
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + Path.GetFileName(viewmodel.FileName);
+                string fileNameWithPath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(fileNameWithPath, FileMode.Create))
+                {
+                    viewmodel.CopyTo(stream);
+                }
+            }
+            return uniqueFileName;
+        }
     }
+    
 }

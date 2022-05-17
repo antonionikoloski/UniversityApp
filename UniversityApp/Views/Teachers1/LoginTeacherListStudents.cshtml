@@ -1,0 +1,107 @@
+﻿@model UnversityApp.Models.Teachers
+@{
+    ViewData["Title"] = "LoginTeacherListStudents";
+    Layout = "~/Views/Shared/LoginTeacherListStudents.cshtml";
+}
+
+
+
+   <h4>Students</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Students.First().FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Students.First().LastName)
+            </th>
+           
+      
+            <th>
+                  @Html.DisplayNameFor(model => model.Enrollment.First().Grade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Enrollment.First().ExamPoints)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Enrollment.First().FinishDate)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+     
+
+        @{
+            int counter = 0;
+        }
+@foreach (var item in Model.Students) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
+            </td>
+          
+          
+            
+               <td>
+                   @if(Model.Enrollment[counter].Grade==0)
+                    {
+                        <form asp-controller="Teachers1" asp-action="SaveGrade" asp-route-id="@Model.Enrollment[counter].Id">
+                       <p>
+                     Grade: <input type="number" name="Grade" />
+                  <input type="submit" value="EnterGrade" />
+                          </p>
+ 
+                     </form>
+                    }
+                   
+                    @if(Model.Enrollment[counter].Grade!=0)
+                    {
+                @Html.DisplayFor(modelItem => modelItem.Enrollment[counter].Grade)
+                    }
+            </td>
+               <td>
+                          @if(Model.Enrollment[counter].ExamPoints==0)
+                    {
+                        <form asp-controller="Teachers1" asp-action="SavePoints" asp-route-id="@Model.Enrollment[counter].Id">
+                       <p>
+                     Points: <input type="number" name="Points" />
+                  <input type="submit" value="EnterPoints" />
+                          </p>
+ 
+                     </form>
+                    }
+                   
+                    @if(Model.Enrollment[counter].ExamPoints!=0)
+                    {
+                @Html.DisplayFor(modelItem => modelItem.Enrollment[counter].ExamPoints)
+                    }
+             
+            </td>
+               <td>
+                      @if(Model.Enrollment[counter].FinishDate==null)
+                    {
+                        <form asp-controller="Teachers1" asp-action="SaveDate" asp-route-id="@Model.Enrollment[counter].Id">
+                       <p>
+                     Date: <input type="date" name="Date" />
+                  <input type="submit" value="EnterFinishDate" />
+                          </p>
+ 
+                     </form>
+                    }
+                   
+                    @if(Model.Enrollment[counter].FinishDate!=null)
+                    {
+                @Html.DisplayFor(modelItem => modelItem.Enrollment[counter].Grade)
+                    }
+            </td>
+            @{
+                counter++;
+            }
+       
+    
+        </tr>
+} 

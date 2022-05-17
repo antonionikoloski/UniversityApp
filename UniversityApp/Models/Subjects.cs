@@ -1,5 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using UniversityApp.Areas.Identity.Data;
+
 namespace UnversityApp.Models;
 
 public class Subjects
@@ -29,4 +31,5 @@ public class Subjects
 
     public ICollection<EnrollMent> EnrollMent { get; set; }
     public IList<Students> Studenti { get; set; }
+   
 }

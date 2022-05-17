@@ -150,5 +150,86 @@ namespace UniversityApp.Controllers
         {
             return _context.Teachers.Any(e => e.Id == id);
         }
+        public async Task<IActionResult> LoginTeacher(int id)
+        {
+            var teachers = await _context.Teachers
+               .FirstOrDefaultAsync(m => m.Id == id);
+            var students = from m in _context.Subjects
+                           select m;
+
+            students = students.Where(x => x.FirstTeacherId == id);
+            var students1 = from m in _context.Subjects
+                           select m;
+
+            students1 = students1.Where(x => x.SecondTeacherId == id);
+
+
+          
+            teachers.Subjects = await students1.ToListAsync();
+            teachers.Subjects2=await students.ToListAsync();
+            return View(teachers);
+        }
+        public async Task<IActionResult> LoginTeacherListStudents(int id)
+        {
+            var predmeti = from m in _context.Enrollment
+                           select m;
+            predmeti = predmeti.Where(x => x.Pom2Id == id);
+            var student = from m in _context.Students
+                          select m;
+            List<int> nova = new List<int>();
+            foreach (var pom in predmeti)
+            {
+                foreach (var j in student)
+                {
+                    if (pom.Pom1Id == j.Id)
+                    {
+                        nova.Add(j.Id);
+                    }
+                }
+            }
+            student = student.Where(t => nova.Contains(t.Id));
+            var teachers = await _context.Teachers
+         .FirstOrDefaultAsync(m => m.Id == id);
+          teachers.Students= await student.ToListAsync();
+            teachers.Enrollment = await predmeti.ToListAsync();
+            return View(teachers);
+        }
+        public async Task<IActionResult> LoginTeacherDetailsStudents(int id)
+        {
+            var students = await _context.Students
+                        .FirstOrDefaultAsync(m => m.Id == id);
+
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SaveGrade(int id,int Grade)
+        {
+            var students = await _context.Enrollment
+                      .FirstOrDefaultAsync(m => m.Id == id);
+            students.Grade = Grade;
+            _context.Update(students);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> SavePoints(int id, int Points)
+        {
+            var students = await _context.Enrollment
+                      .FirstOrDefaultAsync(m => m.Id == id);
+            students.ExamPoints = Points;
+            _context.Update(students);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        public async Task<IActionResult> SaveDate(int id, DateTime Date)
+        {
+            var students = await _context.Enrollment
+                      .FirstOrDefaultAsync(m => m.Id == id);
+            students.FinishDate = Date;
+            _context.Update(students);
+            _context.SaveChanges();
+            return RedirectToAction("Index");
+        }
+
     }
 }

@@ -1,0 +1,90 @@
+﻿@model UnversityApp.Models.Teachers
+@{
+    ViewData["Title"] = "LoginTeacher";
+    Layout = "~/Views/Shared/LoginStudentLayout.cshtml";
+}
+
+<h1>Login as   @Html.DisplayFor(modelItem => modelItem.FirstName)</h1>
+
+   <h4>Subjects</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Subjects.First().Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subjects.First().Credits)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subjects.First().Semester)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subjects.First().Programme)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Subjects.First().EducationLevel)
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+     
+
+
+                 
+                        
+@foreach (var item in Model.Subjects) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Credits)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Semester)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Programme)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EducationLevel)
+            </td>
+       
+            <td>
+                <a asp-action="LoginTeacherListStudents" asp-route-id="@item.Id">Details</a> |
+               
+            </td>
+        </tr>
+} 
+
+@foreach (var item in Model.Subjects2) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Credits)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Semester)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Programme)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EducationLevel)
+            </td>
+       
+            <td>
+                <a asp-action="LoginTeacherListStudents" asp-route-id="@item.Id">Details</a> |
+               
+            </td>
+        </tr>
+} 
+    </tbody>
+</table>
+
+

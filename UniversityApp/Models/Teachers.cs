@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using UniversityApp.Areas.Identity.Data;
 
 namespace UnversityApp.Models;
 
@@ -25,4 +26,10 @@ public class Teachers
      
      public ICollection<Subjects> Subjects { get; set; }
     public ICollection<Subjects> Subjects2 { get; set; }
+     public ICollection<Students> Students { get; set; }
+      public IList <EnrollMent> Enrollment { get; set; }
+       public UniversityAppUser id_foreign { get; set; }
+    public string? nadvoresen { get; set; }
+     
+     
 }

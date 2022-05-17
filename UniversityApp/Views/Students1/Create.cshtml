@@ -47,6 +47,16 @@
                 <input asp-for="EducationLevel" class="form-control" />
                 <span asp-validation-for="EducationLevel" class="text-danger"></span>
             </div>
+              <div class="form-group">
+                <label asp-for="id_foreign.Email" class="control-label"></label>
+                <input asp-for="id_foreign.Email" class="form-control" />
+                <span asp-validation-for="id_foreign.Email" class="text-danger"></span>
+            </div>
+              <div class="form-group">
+                <label asp-for="id_foreign.PasswordHash" class="control-label"></label>
+                <input asp-for="id_foreign.PasswordHash" class="form-control" />
+                <span asp-validation-for="id_foreign.PasswordHash" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>

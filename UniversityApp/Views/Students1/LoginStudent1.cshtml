@@ -1,0 +1,105 @@
+﻿@model UnversityApp.Models.Students
+@{
+    ViewData["Title"] = "LoginStudent1";
+    Layout = "~/Views/Shared/LoginStudentLayout.cshtml";
+}
+
+<h1>Welcome @Html.DisplayFor(model => model.FirstName) </h1>
+
+    <h4>Subjects</h4>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Predmeti[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Predmeti[0].Credits)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Predmeti[0].Semester)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Predmeti[0].Programme)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Predmeti[0].EducationLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EnrollMent.First().SeminalUrl)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EnrollMent.First().Grade)
+            </th>
+            <th>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+     
+
+        @{
+            int counter = 0;
+        }
+                 
+                        
+@foreach (var item in Model.Predmeti) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Credits)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Semester)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Programme)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EducationLevel)
+            </td>
+            <td>
+                    @if (Model.EnrollMent[counter].SeminalUrl == "None")
+                    {
+                    
+                        <form method="post" enctype="multipart/form-data" asp-controller="Students1" asp-action="LoginStudentDetails" asp-route-id="@item.Id">
+                            <div class="form-group">
+                      <div class="col-md-10">
+                    
+                          <input type="file" name="file"/>
+                          <input type="submit" value="Upload file">
+                      </div>
+                  </div>
+              </form>
+              }
+              @if(Model.EnrollMent[counter].SeminalUrl != "None")
+                    {
+                            <a href="~pom/@Model.EnrollMent[counter].SeminalUrl">Open</a>
+                    }
+                </td>
+            <td>
+          
+                  @Html.DisplayFor(modelItem => modelItem.EnrollMent[counter].Grade)
+                 
+                 @{
+                counter++;  
+            }
+            </td>
+            <td>
+                <a asp-action="LoginStudentDetails" asp-route-id="@item.Id" >Details</a> |
+               
+            </td>
+            </tr>
+          
+        } 
+
+  <td>
+    
+
+            </td>
+    </tbody>
+</table>
+
+
